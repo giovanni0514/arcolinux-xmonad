@@ -22,7 +22,6 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Fullscreen (fullscreenFull)
 import XMonad.Layout.Cross(simpleCross)
 import XMonad.Layout.Spiral(spiral)
-import XMonad.Layout.GridVariants
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
@@ -65,7 +64,7 @@ myManageHook = composeAll
     , className =? "mpv"        --> doFloat
     , isFullscreen --> doFullFloat]
 
-myLayout = avoidStruts $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ smartBorders tiled ||| smartBorders (Mirror tiled) ||| Grid(16/10) ||| spiral (6/7)  ||| ThreeColMid 1 (3/100) (1/2) ||| noBorders Full
+myLayout = smartSpacing 5 $ avoidStruts $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ smartBorders tiled ||| smartBorders (Mirror tiled) ||| spiral (6/7)  ||| ThreeColMid 1 (3/100) (1/2) ||| noBorders Full
     where
         tiled = Tall nmaster delta tiled_ratio
         nmaster = 1
@@ -312,7 +311,7 @@ main = do
             --myBaseConfig { keys = belgianKeys <+> keys belgianConfig }
 
                 {startupHook = myStartupHook
-, layoutHook = smartBorders $ spacingRaw True (Border 10 5 5 5) True (Border 10 5 5 5) True $ myLayout ||| layoutHook myBaseConfig
+, layoutHook = gaps [(U,35), (D,5), (R,5), (L,5)] $ myLayout ||| layoutHook myBaseConfig
 , manageHook = manageSpawn <+> myManageHook <+> manageHook myBaseConfig
 , modMask = myModMask
 , borderWidth = myBorderWidth
