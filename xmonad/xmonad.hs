@@ -50,7 +50,7 @@ winType  = "#c678dd"
 
 myModMask = mod4Mask
 myFocusFollowsMouse = True
-myBorderWidth = 3
+myBorderWidth = 2
 myTerminal = "urxvt"
 myWorkspaces    = ["\61612","\61899","\61947","\61635","\61502","\61501","\61705","\61564","\62150"]
 myBaseConfig = desktopConfig
@@ -312,7 +312,7 @@ main = do
             --myBaseConfig { keys = belgianKeys <+> keys belgianConfig }
 
                 {startupHook = myStartupHook
-, layoutHook = smartBorders $ spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True $ myLayout ||| layoutHook myBaseConfig
+, layoutHook = smartBorders $ spacingRaw True (Border 10 5 5 5) True (Border 10 5 5 5) True $ myLayout ||| layoutHook myBaseConfig
 , manageHook = manageSpawn <+> myManageHook <+> manageHook myBaseConfig
 , modMask = myModMask
 , borderWidth = myBorderWidth
