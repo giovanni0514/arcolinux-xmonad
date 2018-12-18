@@ -278,7 +278,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 	--Belgian Azerty users use this line
 --  | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla]
 	--French Azerty users use this line
-  -- | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla]
+  -- | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_minus, xK_egrave, xK_underscore, xK_ccedilla]
       , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
   ++
   -- ctrl-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
