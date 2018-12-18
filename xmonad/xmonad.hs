@@ -274,9 +274,9 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   [((m .|. modMask, k), windows $ f i)
   --Keyboard layouts
   --qwerty users use this line
-  -- | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+   | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
 	--Belgian Azerty users use this line
-  | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla]
+--  | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla]
 	--French Azerty users use this line
   -- | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla]
       , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
@@ -300,11 +300,11 @@ main = do
     xmonad . ewmh $
 	--Keyboard layouts
 	--qwerty users use this line
-            --myBaseConfig
+            myBaseConfig
 	--French Azerty users use this line
             --myBaseConfig { keys = azertyKeys <+> keys azertyConfig }
 	--Belgian Azerty users use this line
-            myBaseConfig { keys = belgianKeys <+> keys belgianConfig }
+ --           myBaseConfig { keys = belgianKeys <+> keys belgianConfig }
 
                 {startupHook = myStartupHook
 , layoutHook = smartBorders $ spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True $ myLayout ||| layoutHook myBaseConfig
