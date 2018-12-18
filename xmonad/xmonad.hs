@@ -10,7 +10,7 @@ import XMonad.Config.Desktop
 import XMonad.Config.Azerty
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Actions.SpawnOn
-import XMonad.Util.EZConfig (additionalKeys, additionalMouseBindings)  
+import XMonad.Util.EZConfig (additionalKeys, additionalMouseBindings)
 import XMonad.Actions.CycleWS
 import XMonad.Hooks.UrgencyHook
 import qualified Codec.Binary.UTF8.String as UTF8
@@ -54,7 +54,6 @@ myBorderWidth = 3
 myTerminal = "urxvt"
 myWorkspaces    = ["\61612","\61899","\61947","\61635","\61502","\61501","\61705","\61564","\62150"]
 myBaseConfig = desktopConfig
---myBaseConfig = desktopConfig { keys = azertyKeys <+> keys belgianConfig }
 
 -- window manipulations
 myManageHook = composeAll
@@ -72,22 +71,22 @@ myLayout = avoidStruts $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ smartBorders ti
         nmaster = 1
         delta = 3/100
         tiled_ratio = 1/2
-        
+
 
 myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
- 
+
     -- mod-button1, Set the window to floating mode and move by dragging
     [ ((modMask, 1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
- 
+
     -- mod-button2, Raise the window to the top of the stack
     , ((modMask, 2), (\w -> focus w >> windows W.shiftMaster))
- 
+
     -- mod-button3, Set the window to floating mode and resize by dragging
     , ((modMask, 3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
- 
+
     ]
-    
-    
+
+
 -- keys config
 
 myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
@@ -150,7 +149,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((controlMask .|. mod1Mask , xK_Return ), spawn $ "urxvt")
 
   -- ALT + ... KEYS
-  
+
   , ((mod1Mask, xK_f), spawn $ "variety -f" )
   , ((mod1Mask, xK_n), spawn $ "variety -n" )
   , ((mod1Mask, xK_p), spawn $ "variety -p" )
@@ -164,7 +163,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((mod1Mask, xK_F3), spawn $ "xfce4-appfinder" )
 
   --VARIETY KEYS WITH PYWAL
-  
+
   , ((mod1Mask .|. shiftMask , xK_f ), spawn $ "variety -f && wal -i $(cat $HOME/.config/variety/wallpaper/wallpaper.jpg.txt)&")
   , ((mod1Mask .|. shiftMask , xK_n ), spawn $ "variety -n && wal -i $(cat $HOME/.config/variety/wallpaper/wallpaper.jpg.txt)&")
   , ((mod1Mask .|. shiftMask , xK_p ), spawn $ "variety -p && wal -i $(cat $HOME/.config/variety/wallpaper/wallpaper.jpg.txt)&")
@@ -172,11 +171,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   , ((mod1Mask .|. shiftMask , xK_u ), spawn $ "wal -i $(cat $HOME/.config/variety/wallpaper/wallpaper.jpg.txt)&")
 
   --CONTROL + SHIFT KEYS
-  
+
   , ((controlMask .|. shiftMask , xK_Escape ), spawn $ "xfce4-taskmanager")
 
   --SCREENSHOTS
-  
+
   , ((0, xK_Print), spawn $ "scrot 'ArcoLinux-%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f $$(xdg-user-dir PICTURES)'")
   , ((controlMask, xK_Print), spawn $ "xfce4-screenshooter" )
   , ((controlMask .|. shiftMask , xK_Print ), spawn $ "gnome-screenshot -i")
@@ -233,7 +232,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   -- Move focus to the previous window.
   , ((controlMask .|. mod1Mask , xK_Right ), windows W.focusUp  )
-  
+
   -- Move focus to the previous window.
   , ((modMask, xK_k), windows W.focusUp  )
 
@@ -273,10 +272,15 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- mod-[1..9], Switch to workspace N
   -- mod-shift-[1..9], Move client to workspace N
   [((m .|. modMask, k), windows $ f i)
-      | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+  --Keyboard layouts
+  --qwerty users use this line
+  -- | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
+	--Belgian Azerty users use this line
+  | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla]
+	--French Azerty users use this line
+  -- | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla]
       , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
   ++
-
   -- ctrl-{w,e,r}, Switch to physical/Xinerama screens 1, 2, or 3
   -- ctrl-shift-{w,e,r}, Move client to screen 1, 2, or 3
   [((m .|. controlMask, key), screenWorkspace sc >>= flip whenJust (windows . f))
@@ -294,9 +298,16 @@ main = do
 
 
     xmonad . ewmh $
-            myBaseConfig
+	--Keyboard layouts
+	--qwerty users use this line
+            --myBaseConfig
+	--French Azerty users use this line
+            --myBaseConfig { keys = azertyKeys <+> keys azertyConfig }
+	--Belgian Azerty users use this line
+            myBaseConfig { keys = belgianKeys <+> keys belgianConfig }
+
                 {startupHook = myStartupHook
-, layoutHook = smartBorders $ spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True $ myLayout ||| layoutHook myBaseConfig  
+, layoutHook = smartBorders $ spacingRaw True (Border 0 10 10 10) True (Border 10 10 10 10) True $ myLayout ||| layoutHook myBaseConfig
 , manageHook = manageSpawn <+> myManageHook <+> manageHook myBaseConfig
 , modMask = myModMask
 , borderWidth = myBorderWidth
