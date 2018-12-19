@@ -26,6 +26,7 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 
+
 import XMonad.Layout.CenteredMaster(centerMaster)
 
 import Graphics.X11.ExtraTypes.XF86
@@ -62,9 +63,15 @@ myManageHook = composeAll
     , className =? "Arandr"           --> doFullFloat
     , className =? "feh"           --> doFloat
     , className =? "mpv"        --> doFloat
+--    , className =? "Vivaldi-stable"  --> doShift "\61612d"
+--    , className =? "Gimp"          --> doShift "\61502"
+--    , className =? "Spotify"          --> doShift "\62150"
+--    , className =? "vlc"          --> doShift "\61501"
+--    , className =? "Thunar" --> doShift "\61564"
     , isFullscreen --> doFullFloat]
+    
 
-myLayout = smartSpacing 5 $ avoidStruts $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ smartBorders tiled ||| smartBorders (Mirror tiled) ||| spiral (6/7)  ||| ThreeColMid 1 (3/100) (1/2) ||| noBorders Full
+myLayout = spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $ avoidStruts $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ smartBorders tiled ||| smartBorders (Mirror tiled) ||| spiral (6/7)  ||| ThreeColMid 1 (3/100) (1/2) ||| noBorders Full
     where
         tiled = Tall nmaster delta tiled_ratio
         nmaster = 1
@@ -276,7 +283,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   --qwerty users use this line
    | (i, k) <- zip (XMonad.workspaces conf) [xK_1 .. xK_9]
 
-	--French Azerty users use this line
+  --French Azerty users use this line
   -- | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_minus, xK_egrave, xK_underscore, xK_ccedilla]
 
   --Belgian Azerty users use this line
@@ -301,13 +308,12 @@ main = do
 
 
     xmonad . ewmh $
-	
   --Keyboard layouts
-	--qwerty users use this line
+  --qwerty users use this line
             myBaseConfig
-	--French Azerty users use this line
+  --French Azerty users use this line
             --myBaseConfig { keys = azertyKeys <+> keys azertyConfig }
-	--Belgian Azerty users use this line
+  --Belgian Azerty users use this line
             --myBaseConfig { keys = belgianKeys <+> keys belgianConfig }
 
                 {startupHook = myStartupHook
