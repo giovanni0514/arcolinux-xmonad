@@ -3,5 +3,5 @@ if pgrep -x "compton" > /dev/null
 then
 	killall compton
 else
-	compton -b --config ~/.config/bspwm/compton.conf
+	compton -b --config ~/.xmonad/scripts/compton.conf
 fi
