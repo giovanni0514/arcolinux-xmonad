@@ -84,9 +84,9 @@ myManageHook = composeAll . concat $
     -- my4Shifts = []
     -- my5Shifts = ["Gimp", "feh"]
     -- my6Shifts = ["vlc", "mpv"]
-    -- my7Shifts = ["feh"]
+    -- my7Shifts = ["Virtualbox"]
     -- my8Shifts = ["Thunar"]
-    -- my9Shifts = ["Spotify"]
+    -- my9Shifts = ["discord"]
 
     
     
