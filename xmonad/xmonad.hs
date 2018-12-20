@@ -75,6 +75,8 @@ myManageHook = composeAll . concat $
     -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61705" | x <- my7Shifts]
     -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61564" | x <- my8Shifts]
     -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\62150" | x <- my9Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61872" | x <- my10Shifts]
+
     ]
     where
     -- doShiftAndGo = doF . liftM2 (.) W.greedyView W.shift
@@ -90,7 +92,8 @@ myManageHook = composeAll . concat $
     -- my6Shifts = ["vlc", "mpv"]
     -- my7Shifts = ["Virtualbox"]
     -- my8Shifts = ["Thunar"]
-    -- my9Shifts = ["discord"]
+    -- my9Shifts = []
+    -- my10Shifts = ["discord"]
 
     
     
