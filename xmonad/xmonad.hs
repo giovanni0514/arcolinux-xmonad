@@ -5,7 +5,7 @@ import XMonad
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.ManageHelpers(doFullFloat, isFullscreen)
+import XMonad.Hooks.ManageHelpers(doFullFloat, isFullscreen, isDialog)
 import XMonad.Config.Desktop
 import XMonad.Config.Azerty
 import XMonad.Util.Run(spawnPipe)
@@ -56,19 +56,39 @@ myWorkspaces    = ["\61612","\61899","\61947","\61635","\61502","\61501","\61705
 myBaseConfig = desktopConfig
 
 -- window manipulations
-myManageHook = composeAll
-    [ className =? "Galculator"     --> doFloat
-    , resource  =? "desktop_window" --> doIgnore
-    , className =? "Oblogout"          --> doFloat
-    , className =? "Arandr"           --> doFullFloat
-    , className =? "feh"           --> doFloat
-    , className =? "mpv"        --> doFloat
---    , className =? "Vivaldi-stable"  --> doShift "\61612"
---    , className =? "Gimp"          --> doShift "\61502"
---    , className =? "Spotify"          --> doShift "\62150"
---    , className =? "vlc"          --> doShift "\61501"
---    , className =? "Thunar" --> doShift "\61564"
-    , isFullscreen --> doFullFloat]
+myManageHook = composeAll . concat $
+    [ [isDialog --> doFloat]
+    , [className =? c --> doFloat | c <- myCFloats]
+    , [title =? t --> doFloat | t <- myTFloats]
+    , [resource =? r --> doFloat | r <- myRFloats]
+    , [resource =? i --> doIgnore | i <- myIgnores]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61612" | x <- my1Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61899" | x <- my2Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61947" | x <- my3Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61635" | x <- my4Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61502" | x <- my5Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61501" | x <- my6Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61705" | x <- my7Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61564" | x <- my8Shifts]
+    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\62150" | x <- my9Shifts]
+    ]
+    where
+    -- doShiftAndGo = doF . liftM2 (.) W.greedyView W.shift
+    myCFloats = ["Arandr", "Galculator", "Oblogout", "feh", "mpv"]
+    myTFloats = ["Downloads", "Save As..."]
+    myRFloats = []
+    myIgnores = ["desktop_window"]
+    -- my1Shifts = ["Chromium", "Vivaldi-stable", "Firefox"]
+    -- my2Shifts = []
+    -- my3Shifts = ["Inkscape"]
+    -- my4Shifts = []
+    -- my5Shifts = ["Gimp", "feh"]
+    -- my6Shifts = ["vlc", "mpv"]
+    -- my7Shifts = ["feh"]
+    -- my8Shifts = ["Thunar"]
+    -- my9Shifts = ["Spotify"]
+
+    
     
 
 myLayout = spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $ avoidStruts $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ smartBorders tiled ||| smartBorders (Mirror tiled) ||| spiral (6/7)  ||| ThreeColMid 1 (3/100) (1/2) ||| noBorders Full
