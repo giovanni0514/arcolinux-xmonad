@@ -2,6 +2,7 @@ import System.IO
 import System.Exit
 
 import XMonad
+import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
@@ -32,6 +33,7 @@ import XMonad.Layout.CenteredMaster(centerMaster)
 import Graphics.X11.ExtraTypes.XF86
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
+import qualified Data.ByteString as B
 import Control.Monad (liftM2)
 import qualified DBus as D
 import qualified DBus.Client as D
@@ -39,6 +41,7 @@ import qualified DBus.Client as D
 
 myStartupHook = do
     spawn "$HOME/.xmonad/scripts/autostart.sh"
+    setWMName "LG3D"
 
 -- colours
 normBord = "#4c566a"
@@ -49,6 +52,7 @@ winType  = "#c678dd"
 
 
 myModMask = mod4Mask
+encodeCChar = map fromIntegral . B.unpack
 myFocusFollowsMouse = True
 myBorderWidth = 2
 myTerminal = "urxvt"
@@ -71,7 +75,6 @@ myManageHook = composeAll . concat $
     -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61705" | x <- my7Shifts]
     -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61564" | x <- my8Shifts]
     -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\62150" | x <- my9Shifts]
-    -- , [(className =? x <||> title =? x <||> resource =? x) --> doShiftAndGo "\61872" | x <- my10Shifts]
     ]
     where
     -- doShiftAndGo = doF . liftM2 (.) W.greedyView W.shift
@@ -87,8 +90,7 @@ myManageHook = composeAll . concat $
     -- my6Shifts = ["vlc", "mpv"]
     -- my7Shifts = ["Virtualbox"]
     -- my8Shifts = ["Thunar"]
-    -- my9Shifts = []
-    -- my10Shifts = ["discord"]
+    -- my9Shifts = ["discord"]
 
     
     
