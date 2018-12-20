@@ -26,6 +26,7 @@ import XMonad.Layout.Spiral(spiral)
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
+import XMonad.Layout.IndependentScreens
 
 
 import XMonad.Layout.CenteredMaster(centerMaster)
@@ -57,6 +58,7 @@ myFocusFollowsMouse = True
 myBorderWidth = 2
 myTerminal = "urxvt"
 myWorkspaces    = ["\61612","\61899","\61947","\61635","\61502","\61501","\61705","\61564","\62150", "\61872"]
+--myWorkspaces    = withScreens 2 ["\61612","\61899","\61947","\61635","\61502","\61501","\61705","\61564","\62150", "\61872"]
 myBaseConfig = desktopConfig
 
 -- window manipulations
