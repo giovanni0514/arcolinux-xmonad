@@ -21,6 +21,8 @@ function run {
 #Some ways to set your wallpaper besides variety or nitrogen
 feh --bg-scale ~/.xmonad/wall.jpg &
 
+xsetroot -cursor_name left_ptr &
+
 conky -c $HOME/.xmonad/scripts/system-overview &
 run variety &
 run nm-applet &
