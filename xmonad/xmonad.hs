@@ -6,7 +6,7 @@ import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.ManageHelpers(doFullFloat, isFullscreen, isDialog)
+import XMonad.Hooks.ManageHelpers(doFullFloat, doCenterFloat, isFullscreen, isDialog)
 import XMonad.Config.Desktop
 import XMonad.Config.Azerty
 import XMonad.Util.Run(spawnPipe)
@@ -58,13 +58,12 @@ myFocusFollowsMouse = True
 myBorderWidth = 2
 myTerminal = "urxvt"
 myWorkspaces    = ["\61612","\61899","\61947","\61635","\61502","\61501","\61705","\61564","\62150", "\61872"]
---myWorkspaces    = withScreens 2 ["\61612","\61899","\61947","\61635","\61502","\61501","\61705","\61564","\62150", "\61872"]
 myBaseConfig = desktopConfig
 
 -- window manipulations
 myManageHook = composeAll . concat $
     [ [isDialog --> doFloat]
-    , [className =? c --> doFloat | c <- myCFloats]
+    , [className =? c --> doCenterFloat | c <- myCFloats]
     , [title =? t --> doFloat | t <- myTFloats]
     , [resource =? r --> doFloat | r <- myRFloats]
     , [resource =? i --> doIgnore | i <- myIgnores]
