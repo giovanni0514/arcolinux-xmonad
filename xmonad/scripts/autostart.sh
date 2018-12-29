@@ -18,12 +18,15 @@ function run {
 #change your keyboard if you need it
 #setxkbmap -layout be
 
-#Some ways to set your wallpaper besides variety or nitrogen
-feh --bg-scale ~/.xmonad/wall.jpg &
-
+#cursor active at boot
 xsetroot -cursor_name left_ptr &
 
+#Some ways to set your wallpaper besides variety or nitrogen
+feh --bg-scale ~/.xmonad/wall.jpg &
+#start the conky to learn the shortcuts
 conky -c $HOME/.xmonad/scripts/system-overview &
+
+#starting utility applications at boot time
 run variety &
 run nm-applet &
 run pamac-tray &
@@ -33,6 +36,9 @@ blueberry-tray &
 compton --config $HOME/.xmonad/scripts/compton.conf &
 /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
 /usr/lib/xfce4/notifyd/xfce4-notifyd &
+
+#starting user applications at boot time
+#run discord &
 #nitrogen --restore &
 #run caffeine &
 #run vivaldi-stable &
@@ -40,7 +46,6 @@ compton --config $HOME/.xmonad/scripts/compton.conf &
 #run thunar &
 #run dropbox &
 #run insync start &
-#run discord &
 #run spotify &
 #run atom &
 #run volumeicon &
