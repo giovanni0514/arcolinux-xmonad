@@ -27,7 +27,6 @@ conky -c $HOME/.xmonad/scripts/system-overview &
 run variety &
 run nm-applet &
 run pamac-tray &
-run volumeicon &
 run xfce4-power-manager &
 numlockx on &
 blueberry-tray &
@@ -44,3 +43,4 @@ compton --config $HOME/.xmonad/scripts/compton.conf &
 #run discord &
 #run spotify &
 #run atom &
+#run volumeicon &
