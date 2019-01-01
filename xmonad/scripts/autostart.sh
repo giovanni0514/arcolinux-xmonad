@@ -7,6 +7,10 @@ function run {
   fi
 }
 
+#Set your native resolution IF it does not exist in xrandr
+#More info in the script
+#run $HOME/.xmonad/scripts/set-screen-resolution.sh
+
 #Find out your monitor name with xrandr or arandr (save and you get this line)
 #xrandr --output VGA-1 --primary --mode 1360x768 --pos 0x0 --rotate normal
 #xrandr --output DP2 --primary --mode 1920x1080 --rate 60.00 --output LVDS1 --off &
@@ -24,7 +28,7 @@ xsetroot -cursor_name left_ptr &
 #Some ways to set your wallpaper besides variety or nitrogen
 feh --bg-scale ~/.xmonad/wall.jpg &
 #start the conky to learn the shortcuts
-conky -c $HOME/.xmonad/scripts/system-overview &
+(sleep 2; conky -c $HOME/.xmonad/scripts/system-overview) &
 
 #starting utility applications at boot time
 run variety &
