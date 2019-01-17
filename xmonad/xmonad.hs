@@ -63,7 +63,7 @@ myBaseConfig = desktopConfig
 
 -- window manipulations
 myManageHook = composeAll . concat $
-    [ [isDialog --> doFloat]
+    [ [isDialog --> doCenterFloat]
     , [className =? c --> doCenterFloat | c <- myCFloats]
     , [title =? t --> doFloat | t <- myTFloats]
     , [resource =? r --> doFloat | r <- myRFloats]
