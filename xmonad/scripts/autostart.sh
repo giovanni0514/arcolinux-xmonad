@@ -9,7 +9,7 @@ function run {
 
 #Set your native resolution IF it does not exist in xrandr
 #More info in the script
-#run $HOME/.xmonad/scripts/set-screen-resolution.sh
+#run $HOME/.xmonad/scripts/set-screen-resolution-in-virtualbox.sh
 
 #Find out your monitor name with xrandr or arandr (save and you get this line)
 #xrandr --output VGA-1 --primary --mode 1360x768 --pos 0x0 --rotate normal
