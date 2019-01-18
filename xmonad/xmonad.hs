@@ -51,6 +51,10 @@ fore     = "#DEE3E0"
 back     = "#282c34"
 winType  = "#c678dd"
 
+--mod4Mask= super key
+--mod1Mask= alt key
+--controlMask= ctrl key
+--shiftMask= shift key
 
 myModMask = mod4Mask
 encodeCChar = map fromIntegral . B.unpack
