@@ -101,8 +101,8 @@ myManageHook = composeAll . concat $
     -- my9Shifts = []
     -- my10Shifts = ["discord"]
 
-    
-    
+
+
 
 myLayout = spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $ avoidStruts $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ smartBorders tiled ||| smartBorders (Mirror tiled) ||| spiral (6/7)  ||| ThreeColMid 1 (3/100) (1/2) ||| noBorders Full
     where
@@ -258,10 +258,10 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
 
   --Focus selected desktop
   , ((modMask, xK_Tab), nextWS)
-  
+
   --Focus selected desktop
   , ((controlMask .|. mod1Mask , xK_Left ), prevWS)
-  
+
   --Focus selected desktop
   , ((controlMask .|. mod1Mask , xK_Right ), nextWS)
 
