@@ -1,12 +1,11 @@
 import System.IO
 import System.Exit
-import System.IO (Handle, hPutStrLn)
+
 import XMonad
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.EwmhDesktops
-import XMonad.Hooks.Minimize
 import XMonad.Hooks.ManageHelpers(doFullFloat, doCenterFloat, isFullscreen, isDialog)
 import XMonad.Config.Desktop
 import XMonad.Config.Azerty
@@ -24,79 +23,48 @@ import XMonad.Layout.NoBorders
 import XMonad.Layout.Fullscreen (fullscreenFull)
 import XMonad.Layout.Cross(simpleCross)
 import XMonad.Layout.Spiral(spiral)
-import XMonad.Layout.Grid
 import XMonad.Layout.ThreeColumns
 import XMonad.Layout.MultiToggle
 import XMonad.Layout.MultiToggle.Instances
 import XMonad.Layout.IndependentScreens
-import XMonad.Layout.Minimize
+
+
 import XMonad.Layout.CenteredMaster(centerMaster)
 
 import Graphics.X11.ExtraTypes.XF86
-import qualified System.IO
 import qualified XMonad.StackSet as W
 import qualified Data.Map as M
 import qualified Data.ByteString as B
-
 import Control.Monad (liftM2)
+import qualified DBus as D
+import qualified DBus.Client as D
+
+
+myStartupHook = do
+    spawn "$HOME/.xmonad/scripts/autostart.sh"
+    setWMName "LG3D"
+
+-- colours
+normBord = "#4c566a"
+focdBord = "#5e81ac"
+fore     = "#DEE3E0"
+back     = "#282c34"
+winType  = "#c678dd"
 
 --mod4Mask= super key
 --mod1Mask= alt key
 --controlMask= ctrl key
 --shiftMask= shift key
 
-myModMask                     = mod4Mask
-mydefaults = def {
-          normalBorderColor   = "#4c566a"
-        , focusedBorderColor  = "#5e81ac"
-        , focusFollowsMouse   = True
-        , mouseBindings       = myMouseBindings
-        , workspaces          = myWorkspaces
-        , keys                = myKeys
-        , modMask             = myModMask
-        , borderWidth         = 3
-        , layoutHook          = myLayoutHook
-        , startupHook         = myStartupHook
-        , manageHook          = myManageHook
-        , handleEventHook     = fullscreenEventHook <+> docksEventHook <+> minimizeEventHook
-        } 
-        
--- Autostart
-myStartupHook = do
-    spawn "$HOME/.xmonad/scripts/autostart.sh"
-    setWMName "LG3D"
-
+myModMask = mod4Mask
 encodeCChar = map fromIntegral . B.unpack
+myFocusFollowsMouse = True
+myBorderWidth = 2
+myWorkspaces    = ["\61612","\61899","\61947","\61635","\61502","\61501","\61705","\61564","\62150","\61872"]
+--myWorkspaces    = ["1","2","3","4","5","6","7","8","9","10"]
+--myWorkspaces    = ["I","II","III","IV","V","VI","VII","VIII","IX","X"]
 
-myTitleColor = "red" -- color of window title
-myTitleLength = 80 -- truncate window title to this length
-myCurrentWSColor = "#a2d1ec" -- color of active workspace
-myVisibleWSColor = "red" -- color of inactive workspace
-myUrgentWSColor = "red" -- color of workspace with 'urgent' window
-myHiddenNoWindowsWSColor = "white"
-
-myLayoutHook = spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $ gaps [(U,35), (D,5), (R,5), (L,5)]
-               $ avoidStruts
-               $ mkToggle (NBFULL ?? NOBORDERS ?? EOT)
-               $ smartBorders
-               $ tiled ||| Grid ||| spiral (6/7) ||| ThreeColMid 1 (3/100) (1/2) ||| noBorders Full  
-                    where
-                    tiled   = Tall nmaster delta ratio
-                    nmaster = 1
-                    delta   = 3/100
-                    ratio   = 1/2
-                
-
-
---WORKSPACES
-xmobarEscape = concatMap doubleLts
-    where doubleLts '<' = "<<"
-          doubleLts x = [x]
-
-myWorkspaces :: [String]
-myWorkspaces = clickable . (map xmobarEscape) $ ["\61612","\61899","\61947","\61635","\61502","\61501","\61705","\61564","\62150","\61872"]
-    where
-               clickable l = [ "<action=xdotool key super+" ++ show (n) ++ ">" ++ ws ++ "</action>" | (i,ws) <- zip [1, 2, 3, 4, 5, 6, 7, 8, 9, 0] l, let n = i ]
+myBaseConfig = desktopConfig
 
 -- window manipulations
 myManageHook = composeAll . concat $
@@ -132,6 +100,31 @@ myManageHook = composeAll . concat $
     -- my8Shifts = ["Thunar"]
     -- my9Shifts = []
     -- my10Shifts = ["discord"]
+
+
+
+
+myLayout = spacingRaw True (Border 0 5 5 5) True (Border 5 5 5 5) True $ avoidStruts $ mkToggle (NBFULL ?? NOBORDERS ?? EOT) $ smartBorders tiled ||| smartBorders (Mirror tiled) ||| spiral (6/7)  ||| ThreeColMid 1 (3/100) (1/2) ||| noBorders Full
+    where
+        tiled = Tall nmaster delta tiled_ratio
+        nmaster = 1
+        delta = 3/100
+        tiled_ratio = 1/2
+
+
+myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
+
+    -- mod-button1, Set the window to floating mode and move by dragging
+    [ ((modMask, 1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
+
+    -- mod-button2, Raise the window to the top of the stack
+    , ((modMask, 2), (\w -> focus w >> windows W.shiftMaster))
+
+    -- mod-button3, Set the window to floating mode and resize by dragging
+    , ((modMask, 3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
+
+    ]
+
 
 -- keys config
 
@@ -326,7 +319,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
   -- | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_minus, xK_egrave, xK_underscore, xK_ccedilla , xK_agrave]
 
   --Belgian Azerty users use this line
-  --   | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla, xK_agrave]
+  -- | (i, k) <- zip (XMonad.workspaces conf) [xK_ampersand, xK_eacute, xK_quotedbl, xK_apostrophe, xK_parenleft, xK_section, xK_egrave, xK_exclam, xK_ccedilla, xK_agrave]
 
       , (f, m) <- [(W.greedyView, 0), (W.shift, shiftMask)]]
   ++
@@ -336,40 +329,35 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
       | (key, sc) <- zip [xK_w, xK_e] [0..]
       , (f, m) <- [(W.view, 0), (W.shift, shiftMask)]]
 
-myMouseBindings (XConfig {XMonad.modMask = modMask}) = M.fromList $
 
-    -- mod-button1, Set the window to floating mode and move by dragging
-    [ ((modMask, 1), (\w -> focus w >> mouseMoveWindow w >> windows W.shiftMaster))
-
-    -- mod-button2, Raise the window to the top of the stack
-    , ((modMask, 2), (\w -> focus w >> windows W.shiftMaster))
-
-    -- mod-button3, Set the window to floating mode and resize by dragging
-    , ((modMask, 3), (\w -> focus w >> mouseResizeWindow w >> windows W.shiftMaster))
-
-    ]
-
---XMOBAR
+main :: IO ()
 main = do
-            
-        xmproc <- spawnPipe "xmobar"
-        xmonad $ ewmh $ mydefaults {
-        logHook =  dynamicLogWithPP $ def {
-        ppOutput = System.IO.hPutStrLn xmproc
-        , ppTitle = xmobarColor myTitleColor "" . ( \ str -> "")
-        , ppCurrent = xmobarColor myCurrentWSColor "" . wrap """"
-        , ppVisible = xmobarColor myVisibleWSColor "" . wrap """"
-        , ppHidden = wrap """"
-        , ppHiddenNoWindows = xmobarColor myHiddenNoWindowsWSColor ""
-        , ppUrgent = xmobarColor myUrgentWSColor ""
-        , ppSep = "  "
-        , ppWsSep = "  "
-        , ppLayout = (\ x -> case x of
-           "Spacing Tall"                 -> "<fn=1>Tall</fn>"
-           "Spacing Grid"                 -> "<fn=1>Grid</fn>"
-           "Spacing Spiral"               -> "<fn=1>spiral</fn>"
-           "Spacing ThreeCol"             -> "<fn=1>ThreeColMid</fn>" 
-           "Spacing Full"                 -> "<fn=1>Full</fn>"         
-           _                                         -> x )
- }
+
+    dbus <- D.connectSession
+    -- Request access to the DBus name
+    D.requestName dbus (D.busName_ "org.xmonad.Log")
+        [D.nameAllowReplacement, D.nameReplaceExisting, D.nameDoNotQueue]
+
+
+    xmonad . ewmh $
+  --Keyboard layouts
+  --qwerty users use this line
+            myBaseConfig
+  --French Azerty users use this line
+            --myBaseConfig { keys = azertyKeys <+> keys azertyConfig }
+  --Belgian Azerty users use this line
+            --myBaseConfig { keys = belgianKeys <+> keys belgianConfig }
+
+                {startupHook = myStartupHook
+, layoutHook = gaps [(U,35), (D,5), (R,5), (L,5)] $ myLayout ||| layoutHook myBaseConfig
+, manageHook = manageSpawn <+> myManageHook <+> manageHook myBaseConfig
+, modMask = myModMask
+, borderWidth = myBorderWidth
+, handleEventHook    = handleEventHook myBaseConfig <+> fullscreenEventHook
+, focusFollowsMouse = myFocusFollowsMouse
+, workspaces = myWorkspaces
+, focusedBorderColor = focdBord
+, normalBorderColor = normBord
+, keys = myKeys
+, mouseBindings = myMouseBindings
 }
